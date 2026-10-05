@@ -13,7 +13,7 @@ Render Razor templates from strings, files or embedded resources outside of ASP.
 [![Downloads](https://img.shields.io/nuget/dt/Rinkink.RazorLight.svg)](https://www.nuget.org/packages/Rinkink.RazorLight/)
 
 # Solidarity with Ukraine
-> 🇺🇦 The original author, Ivan, lives in Ukraine. Please read
+> The original author, Ivan, lives in Ukraine. Please read
 > [his message](https://github.com/toddams/RazorLight#solidarity-with-ukraine)
 > and consider supporting [Come Back Alive](https://savelife.in.ua/en/donate-en/). Slava Ukraini!
 

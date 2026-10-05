@@ -8,7 +8,7 @@
     <EmbedUntrackedSource>true</EmbedUntrackedSource>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <RepositoryUrl>https://github.com/rinkink/razorlight</RepositoryUrl>
-	<PackageProjectUrl>https://github.com/rinkink/razorlight</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/rinkink/razorlight</PackageProjectUrl>
 	<RepositoryType>git</RepositoryType>
   </PropertyGroup>
 </Project>
