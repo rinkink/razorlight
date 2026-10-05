@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      microsoft-extensions:
+        patterns: ["Microsoft.Extensions.*"]
+        update-types: ["patch"]
+      test-packages:
+        patterns: ["xunit*", "Moq", "Verify.*", "Microsoft.NET.Test.Sdk"]
+    ignore:
+      # Last Razor compiler published to NuGet, see RazorLight.csproj
+      - dependency-name: "Microsoft.AspNetCore.Mvc.Razor.Extensions"
+      - dependency-name: "Microsoft.CodeAnalysis.Razor"
+      # Stay on the 8.0 line while targeting net8.0
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
