@@ -9,6 +9,10 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+### Fixed
+- `FileSystemRazorProject.GetItemAsync` throws `ArgumentNullException` on a null key instead of `NullReferenceException`.
+- Three tests that called `Assert.ThrowsAsync` without awaiting it never asserted anything; they do now.
+
 ## [3.0.0] - 2026-10-05
 
 First release of the fork. Published to NuGet as `Rinkink.RazorLight`.
