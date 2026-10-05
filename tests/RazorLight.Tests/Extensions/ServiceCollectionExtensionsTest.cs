@@ -261,8 +261,7 @@ namespace RazorLight.Tests.Extensions
 
 			services.AddRazorLight()
 				.UseMemoryCachingProvider()
-				.UseFileSystemProject(_rootPath)
-				.UseNetFrameworkLegacyFix();
+				.UseFileSystemProject(_rootPath);
 
 			services.RemoveAll<IMetadataReferenceManager>();
 			services.AddSingleton<IMetadataReferenceManager>(new TestMetadataReferenceManager(() =>
@@ -276,8 +275,6 @@ namespace RazorLight.Tests.Extensions
 			}));
 
 			var provider = services.BuildServiceProvider();
-			var directoryFormatter = provider.GetService<IAssemblyPathFormatter>();
-			Assert.IsType<LegacyFixAssemblyPathFormatter>(directoryFormatter);
 
 			var project = provider.GetService<RazorLightProject>();
 			Assert.IsType<FileSystemRazorProject>(project);

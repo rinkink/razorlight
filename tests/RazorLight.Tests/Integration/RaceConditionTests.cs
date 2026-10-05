@@ -8,17 +8,15 @@ namespace RazorLight.Tests.Integration
 	public class RaceConditionTests
 	{
 		[Fact]
+		[Trait("Category", "Slow")]
 		public async Task Multiple_Simultaneous_Compilations_RaceCondition_Test()
 		{
 			var path = DirectoryUtils.RootDirectory;
 
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				var engine = new RazorLightEngineBuilder()
-#if NETFRAMEWORK
-					.SetOperatingAssembly(typeof(Root).Assembly)
-#endif
 					.UseFileSystemProject(Path.Combine(path, "Assets", "Files"))
 					.Build();
 

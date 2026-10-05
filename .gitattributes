@@ -1,0 +1,12 @@
+# Normalise line endings to LF on commit; checkout as LF everywhere
+* text=auto eol=lf
+
+# Visual Studio rewrites solution files with CRLF, so keep them that way
+*.sln text eol=crlf
+
+# Binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.snk binary

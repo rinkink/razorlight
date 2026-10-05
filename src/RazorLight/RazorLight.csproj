@@ -1,91 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-      <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+      <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>RazorLight</PackageId>
-    <Title>RazorLight</Title>
-    <Description>Use Razor to build your templates from strings / files / EmbeddedResources outside of ASP.NET MVC for .NET Core</Description>
-    <Authors>toddams</Authors>
-    <PackageTags>RazorLight, razor, render, dotnet-core, dotnet, core, template-engine, email, emails</PackageTags>
+    <PackageId>Rinkink.RazorLight</PackageId>
+    <Title>Rinkink.RazorLight</Title>
+    <Description>Fork of RazorLight 2.3.1 retargeted to net8.0 with pinned Razor 6.0.36. Use Razor to build HTML from Razor strings.</Description>
+    <Authors>toddams, rinkink</Authors>
+    <PackageTags>RazorLight, razor, render, template-engine</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <RepositoryUrl>https://github.com/toddams/RazorLight</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.0" />
-    <PackageReference Include="System.Buffers" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="[3.0.3,3.1)" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="[3.0.3,3.1)" />
-    <PackageReference Include="System.Buffers" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="3.1.5" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="3.1.5" />
-    <PackageReference Include="System.Buffers" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.0" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="[6.0.36]" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="[6.0.36]" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
