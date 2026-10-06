@@ -3,6 +3,8 @@
 > **This is a fork.** `Rinkink.RazorLight` is [toddams/RazorLight](https://github.com/toddams/RazorLight) taken at v2.3.1, retargeted to .NET 8 with the Razor compiler pinned to 6.0.36. Upstream has been inactive since 2023. The Precompile tool, samples and legacy .NET Framework support are removed. See [CHANGELOG.md](CHANGELOG.md) for details.
 >
 > Original work by [toddams](https://github.com/toddams), Apache-2.0, see [LICENSE](LICENSE).
+>
+> Looking for .NET 9 as well? [jcamp-code/RazorLight](https://github.com/jcamp-code/RazorLight) is an independent fork on the same Razor 6.0.36 pin, published as [jcamp.RazorLight](https://www.nuget.org/packages/jcamp.RazorLight/).
 
 ---
 
