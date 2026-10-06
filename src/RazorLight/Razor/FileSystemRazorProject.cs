@@ -53,6 +53,21 @@ namespace RazorLight.Razor
 				templateKey = templateKey + Extension;
 			}
 
+			return Task.FromResult(CreateItem(templateKey));
+		}
+
+		public override Task<RazorLightProjectItem> GetRawItemAsync(string templateKey)
+		{
+			if (templateKey == null)
+			{
+				throw new ArgumentNullException(nameof(templateKey));
+			}
+
+			return Task.FromResult(CreateItem(templateKey));
+		}
+
+		private RazorLightProjectItem CreateItem(string templateKey)
+		{
 			string absolutePath = GetAbsoluteFilePathFromKey(templateKey);
 			var item = new FileSystemRazorProjectItem(templateKey, new FileInfo(absolutePath));
 
@@ -61,7 +76,7 @@ namespace RazorLight.Razor
 				item.ExpirationToken = _fileProvider.Watch(templateKey);
 			}
 
-			return Task.FromResult((RazorLightProjectItem)item);
+			return item;
 		}
 
 		/// <summary>

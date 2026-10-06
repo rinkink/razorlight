@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using RazorLight.Internal.Buffering;
+using RazorLight.Razor;
 
 namespace RazorLight
 {
@@ -97,6 +99,24 @@ namespace RazorLight
 				ITemplatePage template = await _engineHandler.CompileTemplateAsync(key);
 
 				await _engineHandler.RenderIncludedTemplateAsync(template, model, context.Writer, context.ViewBag, this);
+			};
+			page.IncludeRawFunc = async key =>
+			{
+				if (_engineHandler.Options.DynamicTemplates.TryGetValue(key, out string content))
+				{
+					return content;
+				}
+
+				RazorLightProjectItem item = await _engineHandler.Compiler.Project.GetRawItemAsync(key);
+				if (!item.Exists)
+				{
+					throw new TemplateNotFoundException($"Raw include \"{key}\" was not found in the project");
+				}
+
+				using (var reader = new StreamReader(item.Read()))
+				{
+					return await reader.ReadToEndAsync();
+				}
 			};
 
 			//_pageActivator.Activate(page, context);

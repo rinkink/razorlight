@@ -63,6 +63,8 @@ namespace RazorLight
 
 		Func<string, object, Task> IncludeFunc { get; set; }
 
+		Func<string, Task<string>> IncludeRawFunc { get; set; }
+
 		void EnsureRenderedBodyOrSections();
 	}
 }

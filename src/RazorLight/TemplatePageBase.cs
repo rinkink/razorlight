@@ -56,6 +56,8 @@ namespace RazorLight
 
 		public Func<string, object, Task> IncludeFunc { get; set; }
 
+		public Func<string, Task<string>> IncludeRawFunc { get; set; }
+
 		private Stack<TagHelperScopeInfo> TagHelperScopes { get; } = new Stack<TagHelperScopeInfo>();
 
 		/// <inheritdoc />

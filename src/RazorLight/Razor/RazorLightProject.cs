@@ -14,6 +14,14 @@ namespace RazorLight.Razor
 		public abstract Task<RazorLightProjectItem> GetItemAsync(string templateKey);
 
 		/// <summary>
+		/// Looks up an item by its exact key, without applying the template extension convention.
+		/// Used by <c>IncludeRawAsync</c> to write a file's content verbatim. Defaults to <see cref="GetItemAsync"/>.
+		/// </summary>
+		/// <param name="templateKey">Exact item key</param>
+		/// <returns></returns>
+		public virtual Task<RazorLightProjectItem> GetRawItemAsync(string templateKey) => GetItemAsync(templateKey);
+
+		/// <summary>
 		/// Looks up for the ViewImports content for the given template
 		/// </summary>
 		/// <param name="templateKey"></param>

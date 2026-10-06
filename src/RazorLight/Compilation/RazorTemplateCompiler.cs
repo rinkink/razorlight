@@ -94,6 +94,8 @@ namespace RazorLight.Compilation
 			return cachedResult;
 		}
 
+		public RazorLightProject Project => _razorProject;
+
 		/// <summary>
 		/// For testing purposes only.
 		/// </summary>

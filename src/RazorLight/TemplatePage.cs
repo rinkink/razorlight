@@ -30,6 +30,26 @@ namespace RazorLight
 		}
 
 		/// <summary>
+		/// Writes the content of a project item verbatim, without compiling it as Razor.
+		/// The key is used exactly as given; no template extension is appended.
+		/// </summary>
+		/// <param name="key">Exact item key, for example <c>Styles/site.css</c></param>
+		public async Task IncludeRawAsync(string key)
+		{
+			if (string.IsNullOrEmpty(key))
+			{
+				throw new ArgumentNullException(nameof(key));
+			}
+
+			if (IncludeRawFunc == null)
+			{
+				throw new InvalidOperationException(nameof(IncludeRawFunc) + " is not set");
+			}
+
+			WriteLiteral(await IncludeRawFunc(key));
+		}
+
+		/// <summary>
 		/// In a Razor layout page, renders the portion of a content page that is not within a named section.
 		/// </summary>
 		/// <returns>The HTML content to render.</returns>

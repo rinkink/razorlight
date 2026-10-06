@@ -21,12 +21,18 @@
 
   <ItemGroup>
     <None Remove="Assets\Embedded\*.cshtml" />
+    <None Remove="Assets\Embedded\*.css" />
     <EmbeddedResource Include="Assets\Embedded\*.cshtml" />
+    <EmbeddedResource Include="Assets\Embedded\*.css" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Assets\Files\*.cshtml" />
+    <None Remove="Assets\Files\*.css" />
     <Content Include="Assets\Files\*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Files\*.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
