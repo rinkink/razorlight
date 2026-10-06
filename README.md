@@ -158,6 +158,18 @@ Include feature is useful when you have reusable parts of your templates you wan
 ```
 First argument takes a key of the template to resolve, second argument is a model of the view (can be null)
 
+## Raw includes
+
+To embed a static file such as CSS without compiling it as Razor, use `IncludeRawAsync`. The key is used exactly as given, no `.cshtml` is appended, and the content is written unencoded, so `@media` and friends survive:
+
+```csharp
+<style>
+@{ await IncludeRawAsync("Styles/site.css"); }
+</style>
+```
+
+Dynamic templates are checked first, then the project. A missing key throws `TemplateNotFoundException`.
+
 # Encoding
 By the default RazorLight encodes Model values as HTML, but sometimes you want to output them as is. You can disable encoding for specific value using @Raw() function
 
@@ -235,7 +247,40 @@ This isn't a RazorLight question, but please see [this StackOverflow answer](htt
 
 ### How to embed css in an email?
 
-This isn't a RazorLight question, but please look into PreMailer.Net.
+To inline a stylesheet into the page, see [Raw includes](#raw-includes). To turn it into per-element `style` attributes, which most email clients need, look into PreMailer.Net.
+
+### Which C# version can I use in templates?
+
+Whatever your application's `LangVersion` is, read from its `deps.json`. On .NET 8 that defaults to C# 12.
+
+### How do I update a template that is already cached?
+
+Templates are cached by key. Remove the key, then compile again:
+
+```csharp
+engine.Handler.Cache.Remove("templateKey");
+string result = await engine.CompileRenderStringAsync("templateKey", newTemplate, model);
+```
+
+Layouts and includes are cached under their own keys, so remove those too if they changed.
+
+### I'm getting "One or more section(s) have been ignored"
+
+A layout must either render every section the page defines, or say it is skipping it.
+If `RenderSection` is conditional, call `IgnoreSection` on the other branch:
+
+```csharp
+@if (Model.ShowData)
+{
+    @RenderSection("data", required: false)
+}
+else
+{
+    IgnoreSection("data");
+}
+```
+
+This is the same rule ASP.NET MVC enforces.
 
 ## Compilation and Deployment Issues (FAQ)
 

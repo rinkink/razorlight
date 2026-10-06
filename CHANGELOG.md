@@ -9,6 +9,11 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+### Added
+- Templates can use C# 12 syntax. Roslyn is now referenced explicitly at 4.8.0 instead of the 4.0.0 that Razor 6.0.36 pulls in. Fixes upstream [#555](https://github.com/toddams/RazorLight/issues/555).
+- `IncludeRawAsync(key)` writes a project item verbatim, without Razor compilation and without appending `.cshtml`. Use it for CSS and other static files. Closes upstream [#359](https://github.com/toddams/RazorLight/issues/359) and [#536](https://github.com/toddams/RazorLight/issues/536).
+- `RazorLightProject.GetRawItemAsync` (virtual) and `IRazorTemplateCompiler.Project` to support the above.
+
 ### Fixed
 - `FileSystemRazorProject.GetItemAsync` throws `ArgumentNullException` on a null key instead of `NullReferenceException`.
 - Three tests that called `Assert.ThrowsAsync` without awaiting it never asserted anything; they do now.
