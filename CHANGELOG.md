@@ -9,6 +9,8 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-10-06
+
 ### Added
 - Templates can use C# 12 syntax. Roslyn is now referenced explicitly at 4.8.0 instead of the 4.0.0 that Razor 6.0.36 pulls in. Fixes upstream [#555](https://github.com/toddams/RazorLight/issues/555).
 - `IncludeRawAsync(key)` writes a project item verbatim, without Razor compilation and without appending `.cshtml`. Use it for CSS and other static files. Closes upstream [#359](https://github.com/toddams/RazorLight/issues/359) and [#536](https://github.com/toddams/RazorLight/issues/536).
@@ -42,5 +44,6 @@ First release of the fork. Published to NuGet as `Rinkink.RazorLight`.
 - Dropped `Pose` and `MarkdownSnippets.MsBuild` test dependencies.
 - `Multiple_Simultaneous_Compilations_RaceCondition_Test` runs 10 iterations instead of 100 and is tagged `Category=Slow`.
 
-[Unreleased]: https://github.com/rinkink/razorlight/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/rinkink/razorlight/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/rinkink/razorlight/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/rinkink/razorlight/compare/v2.3.1...v3.0.0
