@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace RazorLight.Internal
 {
-	public delegate Task RenderAsyncDelegate();
+    public delegate Task RenderAsyncDelegate();
 }

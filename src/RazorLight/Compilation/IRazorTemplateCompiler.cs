@@ -1,14 +1,14 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using RazorLight.Razor;
 
 namespace RazorLight.Compilation
 {
-	public interface IRazorTemplateCompiler
-	{
-		ICompilationService CompilationService { get; }
+    public interface IRazorTemplateCompiler
+    {
+        ICompilationService CompilationService { get; }
 
-		RazorLightProject Project { get; }
+        RazorLightProject Project { get; }
 
-		Task<CompiledTemplateDescriptor> CompileAsync(string templateKey);
-	}
+        Task<CompiledTemplateDescriptor> CompileAsync(string templateKey);
+    }
 }

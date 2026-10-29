@@ -1,13 +1,13 @@
-﻿using RazorLight.Razor;
+using RazorLight.Razor;
 
 namespace RazorLight.Generation
 {
-	public interface IGeneratedRazorTemplate
-	{
-		string TemplateKey { get; }
+    public interface IGeneratedRazorTemplate
+    {
+        string TemplateKey { get; }
 
-		string GeneratedCode { get; }
+        string GeneratedCode { get; }
 
-		RazorLightProjectItem ProjectItem { get; set; }
-	}
+        RazorLightProjectItem ProjectItem { get; set; }
+    }
 }

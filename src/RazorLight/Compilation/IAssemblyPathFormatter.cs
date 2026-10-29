@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace RazorLight.Compilation
 {
-	public interface IAssemblyPathFormatter
-	{
-		string GetAssemblyPath(Assembly assembly);
-	}
+    public interface IAssemblyPathFormatter
+    {
+        string GetAssemblyPath(Assembly assembly);
+    }
 }

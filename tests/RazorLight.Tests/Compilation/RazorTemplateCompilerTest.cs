@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -10,206 +10,206 @@ using Xunit;
 
 namespace RazorLight.Tests.Compilation
 {
-	public class RazorTemplateCompilerTest
-	{
-		[Fact]
-		public void Ensure_Throws_OnNull_Constructor_Dependencies()
-		{
-			var options = new RazorLightOptions();
-			var metadataManager = new DefaultMetadataReferenceManager();
-			var assembly = Assembly.GetCallingAssembly();
-			var project = new EmbeddedRazorProject(assembly);
-			var compilerService = new RoslynCompilationService(metadataManager, assembly);
-			var generator = new RazorSourceGenerator(DefaultRazorEngine.Instance, project);
+    public class RazorTemplateCompilerTest
+    {
+        [Fact]
+        public void Ensure_Throws_OnNull_Constructor_Dependencies()
+        {
+            var options = new RazorLightOptions();
+            var metadataManager = new DefaultMetadataReferenceManager();
+            var assembly = Assembly.GetCallingAssembly();
+            var project = new EmbeddedRazorProject(assembly);
+            var compilerService = new RoslynCompilationService(metadataManager, assembly);
+            var generator = new RazorSourceGenerator(DefaultRazorEngine.Instance, project);
 
-			Action p1 = new Action(() => { new RazorTemplateCompiler(null, compilerService, project, options); });
-			Action p2 = new Action(() => { new RazorTemplateCompiler(generator, null, project, options); });
-			Action p3 = new Action(() => { new RazorTemplateCompiler(generator, compilerService, null, options); });
-			
-			Action p4 = new Action(() => { new RazorTemplateCompiler(generator, compilerService, project, null as RazorLightOptions); });
+            Action p1 = new Action(() => { new RazorTemplateCompiler(null, compilerService, project, options); });
+            Action p2 = new Action(() => { new RazorTemplateCompiler(generator, null, project, options); });
+            Action p3 = new Action(() => { new RazorTemplateCompiler(generator, compilerService, null, options); });
 
-			Assert.Throws<ArgumentNullException>(p1);
-			Assert.Throws<ArgumentNullException>(p2);
-			Assert.Throws<ArgumentNullException>(p3);
-			Assert.Throws<ArgumentNullException>(p4);
-		}
+            Action p4 = new Action(() => { new RazorTemplateCompiler(generator, compilerService, project, null as RazorLightOptions); });
 
-		[Fact]
-		public void TemplateKey_NotNormalized_OnStringRendering()
-		{
-			string templateKey = "key";
+            Assert.Throws<ArgumentNullException>(p1);
+            Assert.Throws<ArgumentNullException>(p2);
+            Assert.Throws<ArgumentNullException>(p3);
+            Assert.Throws<ArgumentNullException>(p4);
+        }
 
-			var options = new RazorLightOptions();
-			options.DynamicTemplates.Add(templateKey, "Template content");
-			var compiler = TestRazorTemplateCompiler.Create(options);
+        [Fact]
+        public void TemplateKey_NotNormalized_OnStringRendering()
+        {
+            string templateKey = "key";
 
-			string normalizedKey = compiler.GetNormalizedKey(templateKey);
+            var options = new RazorLightOptions();
+            options.DynamicTemplates.Add(templateKey, "Template content");
+            var compiler = TestRazorTemplateCompiler.Create(options);
 
-			Assert.NotNull(normalizedKey);
-			Assert.Equal(templateKey, normalizedKey);
-		}
+            string normalizedKey = compiler.GetNormalizedKey(templateKey);
 
-		[Fact]
-		public void TemplateKey_Normalized_On_FilesystemProject()
-		{
-			string templateKey = "key";
-			var project = new FileSystemRazorProject("/");
-			var compiler = TestRazorTemplateCompiler.Create(project: project);
+            Assert.NotNull(normalizedKey);
+            Assert.Equal(templateKey, normalizedKey);
+        }
 
-			string normalizedKey = compiler.GetNormalizedKey(templateKey);
+        [Fact]
+        public void TemplateKey_Normalized_On_FilesystemProject()
+        {
+            string templateKey = "key";
+            var project = new FileSystemRazorProject("/");
+            var compiler = TestRazorTemplateCompiler.Create(project: project);
 
-			Assert.NotNull(normalizedKey);
-			Assert.Equal($"/{templateKey}", normalizedKey);
-		}
+            string normalizedKey = compiler.GetNormalizedKey(templateKey);
 
-		[Fact]
-		public void TemplateKey_NotNormalized_On_NonFileSystemProject()
-		{
-			string templateKey = "key";
-			var project = new EmbeddedRazorProject(typeof(Root).Assembly);
-			var compiler = TestRazorTemplateCompiler.Create(project: project);
+            Assert.NotNull(normalizedKey);
+            Assert.Equal($"/{templateKey}", normalizedKey);
+        }
 
-			string normalizedKey = compiler.GetNormalizedKey(templateKey);
+        [Fact]
+        public void TemplateKey_NotNormalized_On_NonFileSystemProject()
+        {
+            string templateKey = "key";
+            var project = new EmbeddedRazorProject(typeof(Root).Assembly);
+            var compiler = TestRazorTemplateCompiler.Create(project: project);
 
-			Assert.NotNull(normalizedKey);
-			Assert.Equal(templateKey, normalizedKey);
-		}
+            string normalizedKey = compiler.GetNormalizedKey(templateKey);
 
-		[Fact]
-		public async Task Compiler_Takes_Result_From_Cache_OnCompileAsync()
-		{
-			string templateKey = "key";
-			var descriptor = new CompiledTemplateDescriptor();
-			var descriptorTask = Task.FromResult(descriptor);
+            Assert.NotNull(normalizedKey);
+            Assert.Equal(templateKey, normalizedKey);
+        }
 
-			var compiler = TestRazorTemplateCompiler.Create();
+        [Fact]
+        public async Task Compiler_Takes_Result_From_Cache_OnCompileAsync()
+        {
+            string templateKey = "key";
+            var descriptor = new CompiledTemplateDescriptor();
+            var descriptorTask = Task.FromResult(descriptor);
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			compiler.Cache.Set(templateKey, descriptorTask);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-			CompiledTemplateDescriptor result = await compiler.CompileAsync(templateKey);
-
-			Assert.NotNull(result);
-			Assert.Same(descriptor, result);
-		}
-
-		[Fact]
-		public async Task Compiler_Searches_WithNormalizedKey_IfNotFound()
-		{
-			string templateKey = "key";
-			var descriptor = new CompiledTemplateDescriptor();
-			var descriptorTask = Task.FromResult(descriptor);
-
-			var project = new FileSystemRazorProject("/");
-			var compiler = TestRazorTemplateCompiler.Create(project: project);
-
-			string normalizedKey = compiler.GetNormalizedKey(templateKey);
+            var compiler = TestRazorTemplateCompiler.Create();
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			compiler.Cache.Set(normalizedKey, descriptorTask);
+            compiler.Cache.Set(templateKey, descriptorTask);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-			CompiledTemplateDescriptor result = await compiler.CompileAsync(templateKey);
+            CompiledTemplateDescriptor result = await compiler.CompileAsync(templateKey);
 
-			Assert.NotNull(result);
-			Assert.Same(descriptor, result);
-		}
+            Assert.NotNull(result);
+            Assert.Same(descriptor, result);
+        }
 
-		[Fact]
-		public async Task Throws_TemplateNotFoundException_If_ProjectItem_NotExist()
-		{
-			var project = new EmbeddedRazorProject(typeof(Root).Assembly);
-			var compiler = TestRazorTemplateCompiler.Create(project: project);
+        [Fact]
+        public async Task Compiler_Searches_WithNormalizedKey_IfNotFound()
+        {
+            string templateKey = "key";
+            var descriptor = new CompiledTemplateDescriptor();
+            var descriptorTask = Task.FromResult(descriptor);
 
-			Func<Task> task = new Func<Task>(() => compiler.CompileAsync("Not.Existing.Key"));
+            var project = new FileSystemRazorProject("/");
+            var compiler = TestRazorTemplateCompiler.Create(project: project);
 
-			await Assert.ThrowsAsync<TemplateNotFoundException>(task);
-		}
+            string normalizedKey = compiler.GetNormalizedKey(templateKey);
 
-		[Fact]
-		public async Task Ensure_TemplateNotFoundException_KnownKeys_NotNull_When_EnableDebugMode_True()
-		{
-			var options = new RazorLightOptions { EnableDebugMode = true };
-			var project = new EmbeddedRazorProject(typeof(Root));
-			var compiler = TestRazorTemplateCompiler.Create(options, project);
-			var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            compiler.Cache.Set(normalizedKey, descriptorTask);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-			var exception = await compiler.CreateTemplateNotFoundException(item);
-			
-			Assert.NotNull(exception.KnownDynamicTemplateKeys);
-			Assert.NotNull(exception.KnownProjectTemplateKeys);
-		}
+            CompiledTemplateDescriptor result = await compiler.CompileAsync(templateKey);
 
-		[Fact]
-		public async Task Ensure_TemplateNotFoundException_KnownKeys_Null_When_EnableDebugMode_False()
-		{
-			var options = new RazorLightOptions { EnableDebugMode = false };
-			var project = new EmbeddedRazorProject(typeof(Root));
-			var compiler = TestRazorTemplateCompiler.Create(options, project);
-			var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
+            Assert.NotNull(result);
+            Assert.Same(descriptor, result);
+        }
 
-			var exception = await compiler.CreateTemplateNotFoundException(item);
+        [Fact]
+        public async Task Throws_TemplateNotFoundException_If_ProjectItem_NotExist()
+        {
+            var project = new EmbeddedRazorProject(typeof(Root).Assembly);
+            var compiler = TestRazorTemplateCompiler.Create(project: project);
 
-			Assert.Null(exception.KnownDynamicTemplateKeys);
-			Assert.Null(exception.KnownProjectTemplateKeys);
-		}
+            Func<Task> task = new Func<Task>(() => compiler.CompileAsync("Not.Existing.Key"));
 
-		[Fact]
-		public async Task Ensure_TemplateNotFoundException_KnownDynamicTemplateKeys_Exist_When_EnableDebugMode_True()
-		{
-			var dynamicTemplateKeys = new[] { "dynamicKey1", "dynamicKey2" };
+            await Assert.ThrowsAsync<TemplateNotFoundException>(task);
+        }
 
-			var project = new EmbeddedRazorProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded");
-			var options = new RazorLightOptions { EnableDebugMode = true };
-			foreach (var dynamicKey in dynamicTemplateKeys) options.DynamicTemplates.Add(dynamicKey, "Content");
-			var compiler = TestRazorTemplateCompiler.Create(options, project);
-			var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
+        [Fact]
+        public async Task Ensure_TemplateNotFoundException_KnownKeys_NotNull_When_EnableDebugMode_True()
+        {
+            var options = new RazorLightOptions { EnableDebugMode = true };
+            var project = new EmbeddedRazorProject(typeof(Root));
+            var compiler = TestRazorTemplateCompiler.Create(options, project);
+            var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
 
-			var exception = await compiler.CreateTemplateNotFoundException(item);
+            var exception = await compiler.CreateTemplateNotFoundException(item);
 
-			Assert.NotNull(exception.KnownDynamicTemplateKeys);
-			Assert.Equal(dynamicTemplateKeys.OrderBy(x => x), exception.KnownDynamicTemplateKeys.OrderBy(x => x));
-		}
+            Assert.NotNull(exception.KnownDynamicTemplateKeys);
+            Assert.NotNull(exception.KnownProjectTemplateKeys);
+        }
 
-		[Fact]
-		public async Task Ensure_TemplateIsCompiled_ForExisting_ProjectItem()
-		{
-			var project = new EmbeddedRazorProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded");
-			var compiler = TestRazorTemplateCompiler.Create(project: project);
+        [Fact]
+        public async Task Ensure_TemplateNotFoundException_KnownKeys_Null_When_EnableDebugMode_False()
+        {
+            var options = new RazorLightOptions { EnableDebugMode = false };
+            var project = new EmbeddedRazorProject(typeof(Root));
+            var compiler = TestRazorTemplateCompiler.Create(options, project);
+            var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
 
-			string templateKey = "Empty.cshtml";
-			var result = await compiler.CompileAsync(templateKey);
+            var exception = await compiler.CreateTemplateNotFoundException(item);
 
-			Assert.NotNull(result);
-			Assert.NotNull(result.TemplateAttribute.TemplateType);
-			Assert.Equal(result.TemplateKey, templateKey);
-			Assert.False(result.IsPrecompiled);
-		}
+            Assert.Null(exception.KnownDynamicTemplateKeys);
+            Assert.Null(exception.KnownProjectTemplateKeys);
+        }
+
+        [Fact]
+        public async Task Ensure_TemplateNotFoundException_KnownDynamicTemplateKeys_Exist_When_EnableDebugMode_True()
+        {
+            var dynamicTemplateKeys = new[] { "dynamicKey1", "dynamicKey2" };
+
+            var project = new EmbeddedRazorProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded");
+            var options = new RazorLightOptions { EnableDebugMode = true };
+            foreach (var dynamicKey in dynamicTemplateKeys) options.DynamicTemplates.Add(dynamicKey, "Content");
+            var compiler = TestRazorTemplateCompiler.Create(options, project);
+            var item = new EmbeddedRazorProjectItem(typeof(Root), "Any.Key");
+
+            var exception = await compiler.CreateTemplateNotFoundException(item);
+
+            Assert.NotNull(exception.KnownDynamicTemplateKeys);
+            Assert.Equal(dynamicTemplateKeys.OrderBy(x => x), exception.KnownDynamicTemplateKeys.OrderBy(x => x));
+        }
+
+        [Fact]
+        public async Task Ensure_TemplateIsCompiled_ForExisting_ProjectItem()
+        {
+            var project = new EmbeddedRazorProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded");
+            var compiler = TestRazorTemplateCompiler.Create(project: project);
+
+            string templateKey = "Empty.cshtml";
+            var result = await compiler.CompileAsync(templateKey);
+
+            Assert.NotNull(result);
+            Assert.NotNull(result.TemplateAttribute.TemplateType);
+            Assert.Equal(result.TemplateKey, templateKey);
+            Assert.False(result.IsPrecompiled);
+        }
 
 
 
-		public class TestRazorTemplateCompiler : RazorTemplateCompiler
-		{
-			public TestRazorTemplateCompiler(
-				RazorSourceGenerator sourceGenerator,
-				RoslynCompilationService roslynCompilationService,
-				RazorLightProject razorLightProject,
-				RazorLightOptions razorLightOptions) : base(sourceGenerator, roslynCompilationService, razorLightProject, razorLightOptions)
-			{
-			}
+        public class TestRazorTemplateCompiler : RazorTemplateCompiler
+        {
+            public TestRazorTemplateCompiler(
+                RazorSourceGenerator sourceGenerator,
+                RoslynCompilationService roslynCompilationService,
+                RazorLightProject razorLightProject,
+                RazorLightOptions razorLightOptions) : base(sourceGenerator, roslynCompilationService, razorLightProject, razorLightOptions)
+            {
+            }
 
-			public static TestRazorTemplateCompiler Create(RazorLightOptions options = null, RazorLightProject project = null)
-			{
-				var razorOptions = options ?? new RazorLightOptions();
-				var metadataManager = new DefaultMetadataReferenceManager();
-				var assembly = Assembly.GetCallingAssembly();
-				var razorProject = project ?? new EmbeddedRazorProject(assembly);
-				var compilerService = new RoslynCompilationService(metadataManager, assembly);
-				var generator = new RazorSourceGenerator(DefaultRazorEngine.Instance, razorProject);
+            public static TestRazorTemplateCompiler Create(RazorLightOptions options = null, RazorLightProject project = null)
+            {
+                var razorOptions = options ?? new RazorLightOptions();
+                var metadataManager = new DefaultMetadataReferenceManager();
+                var assembly = Assembly.GetCallingAssembly();
+                var razorProject = project ?? new EmbeddedRazorProject(assembly);
+                var compilerService = new RoslynCompilationService(metadataManager, assembly);
+                var generator = new RazorSourceGenerator(DefaultRazorEngine.Instance, razorProject);
 
-				return new TestRazorTemplateCompiler(generator, compilerService, razorProject, razorOptions);
-			}
-		}
-	}
+                return new TestRazorTemplateCompiler(generator, compilerService, razorProject, razorOptions);
+            }
+        }
+    }
 }

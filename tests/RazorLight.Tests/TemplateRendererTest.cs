@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -10,172 +10,172 @@ using Xunit;
 
 namespace RazorLight.Tests
 {
-	public class TemplateRendererTest
-	{
-		[Fact]
-		public async Task Ensure_PrerenderCallbacks_Are_Invoked()
-		{
-			//Assign
-			var page = TemplatePageTest.CreatePage(t => t.Write("test"));
+    public class TemplateRendererTest
+    {
+        [Fact]
+        public async Task Ensure_PrerenderCallbacks_Are_Invoked()
+        {
+            //Assign
+            var page = TemplatePageTest.CreatePage(t => t.Write("test"));
 
-			bool triggered1 = false, triggered2 = false;
-			var callbacks = new List<Action<ITemplatePage>>
-			{
-				t => triggered1 = true,
-				t => triggered2 = true
-			};
+            bool triggered1 = false, triggered2 = false;
+            var callbacks = new List<Action<ITemplatePage>>
+            {
+                t => triggered1 = true,
+                t => triggered2 = true
+            };
 
-			var options = new RazorLightOptions { PreRenderCallbacks = callbacks };
-			var engineMock = new Mock<IEngineHandler>();
-			engineMock.SetupGet(e => e.Options).Returns(options);
+            var options = new RazorLightOptions { PreRenderCallbacks = callbacks };
+            var engineMock = new Mock<IEngineHandler>();
+            engineMock.SetupGet(e => e.Options).Returns(options);
 
-			//Act
-			var templateRenderer = new TemplateRenderer(engineMock.Object, HtmlEncoder.Default, new MemoryPoolViewBufferScope());
-			await templateRenderer.RenderAsync(page);
+            //Act
+            var templateRenderer = new TemplateRenderer(engineMock.Object, HtmlEncoder.Default, new MemoryPoolViewBufferScope());
+            await templateRenderer.RenderAsync(page);
 
-			//Assert
-			Assert.True(triggered1);
-			Assert.True(triggered2);
-		}
+            //Assert
+            Assert.True(triggered1);
+            Assert.True(triggered2);
+        }
 
-		[Fact]
-		public async Task Template_Shares_Context_With_Layout()
-		{
-			var encoder = new TemplatePageTest.HtmlTestEncoder();
+        [Fact]
+        public async Task Template_Shares_Context_With_Layout()
+        {
+            var encoder = new TemplatePageTest.HtmlTestEncoder();
 
-			string expected = encoder.Encode("Begin Layout") +
-							  encoder.Encode("Hello") +
-							  encoder.Encode("Begin") +
-							  encoder.Encode("Hello") +
-							  encoder.Encode("End") +
-							  encoder.Encode("End Layout");
+            string expected = encoder.Encode("Begin Layout") +
+                              encoder.Encode("Hello") +
+                              encoder.Encode("Begin") +
+                              encoder.Encode("Hello") +
+                              encoder.Encode("End") +
+                              encoder.Encode("End Layout");
 
-			var layout = TemplatePageTest.CreatePage(v =>
-			{
-				v.Write("Begin Layout");
-				v.Write(v.ViewBag.Title);
-				v.Write(v.RenderBodyPublic());
-				v.Write("End Layout");
-			});
+            var layout = TemplatePageTest.CreatePage(v =>
+            {
+                v.Write("Begin Layout");
+                v.Write(v.ViewBag.Title);
+                v.Write(v.RenderBodyPublic());
+                v.Write("End Layout");
+            });
 
-			var page = TemplatePageTest.CreatePage(v =>
-			{
-				v.Write("Begin");
-				v.Write(v.ViewBag.Title);
-				v.Write("End");
-			});
+            var page = TemplatePageTest.CreatePage(v =>
+            {
+                v.Write("Begin");
+                v.Write(v.ViewBag.Title);
+                v.Write("End");
+            });
 
-			var engineMock = new Mock<IEngineHandler>();
-			engineMock.Setup(t => t.CompileTemplateAsync(It.IsAny<string>()))
-				.Returns(new Func<Task<ITemplatePage>>(() => { return Task.FromResult((ITemplatePage)layout); }));
+            var engineMock = new Mock<IEngineHandler>();
+            engineMock.Setup(t => t.CompileTemplateAsync(It.IsAny<string>()))
+                .Returns(new Func<Task<ITemplatePage>>(() => { return Task.FromResult((ITemplatePage)layout); }));
 
-			engineMock.SetupGet(t => t.Options).Returns(new RazorLightOptions());
+            engineMock.SetupGet(t => t.Options).Returns(new RazorLightOptions());
 
-			dynamic viewbag = new ExpandoObject();
-			viewbag.Title = "Hello";
-			var context = new PageContext(viewbag);
+            dynamic viewbag = new ExpandoObject();
+            viewbag.Title = "Hello";
+            var context = new PageContext(viewbag);
 
-			page.Layout = "_";
-			page.PageContext = context;
+            page.Layout = "_";
+            page.PageContext = context;
 
-			string output;
+            string output;
 
-			using (var writer = new StringWriter())
-			{
-				page.PageContext.Writer = writer;
-				var renderer = new TemplateRenderer(engineMock.Object, encoder, new MemoryPoolViewBufferScope());
-				await renderer.RenderAsync(page);
+            using (var writer = new StringWriter())
+            {
+                page.PageContext.Writer = writer;
+                var renderer = new TemplateRenderer(engineMock.Object, encoder, new MemoryPoolViewBufferScope());
+                await renderer.RenderAsync(page);
 
-				output = writer.ToString();
-			}
+                output = writer.ToString();
+            }
 
-			Assert.Equal(expected, output, StringComparer.Ordinal);
-		}
+            Assert.Equal(expected, output, StringComparer.Ordinal);
+        }
 
-		[Fact]
-		public async Task Template_Shares_Model_With_Layout()
-		{
-			var engine = new RazorLightEngineBuilder()
+        [Fact]
+        public async Task Template_Shares_Model_With_Layout()
+        {
+            var engine = new RazorLightEngineBuilder()
 #if NETFRAMEWORK
-				.SetOperatingAssembly(typeof(Root).Assembly)
+                .SetOperatingAssembly(typeof(Root).Assembly)
 #endif
-				.UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
-				.Build();
+                .UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
+                .Build();
 
-			var model = new TestModel
-			{
-				Value = "123"
-			};
+            var model = new TestModel
+            {
+                Value = "123"
+            };
 
-			string expected = $"Layout: {model.Value}_body: {model.Value}";
+            string expected = $"Layout: {model.Value}_body: {model.Value}";
 
-			string result = await engine.CompileRenderAsync("WithModelAndLayout", model);
-			result = result.Replace(Environment.NewLine, "");
+            string result = await engine.CompileRenderAsync("WithModelAndLayout", model);
+            result = result.Replace(Environment.NewLine, "");
 
-			Assert.Equal(expected, result);
-		}
+            Assert.Equal(expected, result);
+        }
 
-		[Fact]
-		public async Task Templates_Supports_Local_Functions()
-		{
-			// See https://github.com/aspnet/Razor/issues/715
+        [Fact]
+        public async Task Templates_Supports_Local_Functions()
+        {
+            // See https://github.com/aspnet/Razor/issues/715
 
-			var engine = new RazorLightEngineBuilder()
+            var engine = new RazorLightEngineBuilder()
 #if NETFRAMEWORK
-				.SetOperatingAssembly(typeof(Root).Assembly)
+                .SetOperatingAssembly(typeof(Root).Assembly)
 #endif
-				.UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
-				.Build();
+                .UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
+                .Build();
 
-			string expected = "<strong>LocalFunction</strong>";
+            string expected = "<strong>LocalFunction</strong>";
 
-			string result = await engine.CompileRenderAsync("LocalFunction", (object)null);
-			result = result.Replace(Environment.NewLine, "");
+            string result = await engine.CompileRenderAsync("LocalFunction", (object)null);
+            result = result.Replace(Environment.NewLine, "");
 
-			Assert.Equal(expected, result);
-		}
+            Assert.Equal(expected, result);
+        }
 
-		[Fact]
-		public async Task Templates_Supports_Local_Functions_Using_Helper()
-		{
-			// See https://github.com/aspnet/Razor/issues/715
+        [Fact]
+        public async Task Templates_Supports_Local_Functions_Using_Helper()
+        {
+            // See https://github.com/aspnet/Razor/issues/715
 
-			var engine = new RazorLightEngineBuilder()
+            var engine = new RazorLightEngineBuilder()
 #if NETFRAMEWORK
-				.SetOperatingAssembly(typeof(Root).Assembly)
+                .SetOperatingAssembly(typeof(Root).Assembly)
 #endif
-				.UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
-				.Build();
+                .UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
+                .Build();
 
-			string expected = "<strong>LocalFunctionUsingHelper</strong>";
+            string expected = "<strong>LocalFunctionUsingHelper</strong>";
 
-			string result = await engine.CompileRenderAsync("LocalFunctionUsingHelper", (object)null);
-			result = result.Replace(Environment.NewLine, "");
+            string result = await engine.CompileRenderAsync("LocalFunctionUsingHelper", (object)null);
+            result = result.Replace(Environment.NewLine, "");
 
-			Assert.Equal(expected, result);
-		}
+            Assert.Equal(expected, result);
+        }
 
-		[Fact]
-		public async Task Templates_Supports_Conditional_Attribute_Rendering()
-		{
-			// https://github.com/aspnet/AspNetCore/issues/5076
-			var engine = new RazorLightEngineBuilder()
+        [Fact]
+        public async Task Templates_Supports_Conditional_Attribute_Rendering()
+        {
+            // https://github.com/aspnet/AspNetCore/issues/5076
+            var engine = new RazorLightEngineBuilder()
 #if NETFRAMEWORK
-				.SetOperatingAssembly(typeof(Root).Assembly)
+                .SetOperatingAssembly(typeof(Root).Assembly)
 #endif
-				.UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
-				.Build();
+                .UseEmbeddedResourcesProject(typeof(Root).Assembly, "RazorLight.Tests.Assets.Embedded")
+                .Build();
 
-			string expected = "<strong attr=\"class=\"Conditional Attribute\"\"></strong>";
+            string expected = "<strong attr=\"class=\"Conditional Attribute\"\"></strong>";
 
-			var result = await engine.CompileRenderAsync("ConditionalAttributeRendering", true);
+            var result = await engine.CompileRenderAsync("ConditionalAttributeRendering", true);
 
-			Assert.Contains(expected, result);
-		}
+            Assert.Contains(expected, result);
+        }
 
-		public class TestModel
-		{
-			public string Value { get; set; }
-		}
-	}
+        public class TestModel
+        {
+            public string Value { get; set; }
+        }
+    }
 }

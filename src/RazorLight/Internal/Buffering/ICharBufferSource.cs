@@ -1,9 +1,9 @@
-﻿namespace RazorLight.Internal.Buffering
+namespace RazorLight.Internal.Buffering
 {
-	public interface ICharBufferSource
-	{
-		char[] Rent(int bufferSize);
+    public interface ICharBufferSource
+    {
+        char[] Rent(int bufferSize);
 
-		void Return(char[] buffer);
-	}
+        void Return(char[] buffer);
+    }
 }

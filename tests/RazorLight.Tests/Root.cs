@@ -1,6 +1,6 @@
-﻿namespace RazorLight.Tests
+namespace RazorLight.Tests
 {
-	public class Root
-	{
-	}
+    public class Root
+    {
+    }
 }

@@ -1,31 +1,31 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using RazorLight.Tests.Utils;
 using Xunit;
 
 namespace RazorLight.Tests.Integration
 {
-	public class RaceConditionTests
-	{
-		[Fact]
-		[Trait("Category", "Slow")]
-		public async Task Multiple_Simultaneous_Compilations_RaceCondition_Test()
-		{
-			var path = DirectoryUtils.RootDirectory;
+    public class RaceConditionTests
+    {
+        [Fact]
+        [Trait("Category", "Slow")]
+        public async Task Multiple_Simultaneous_Compilations_RaceCondition_Test()
+        {
+            var path = DirectoryUtils.RootDirectory;
 
 
-			for (int i = 0; i < 10; i++)
-			{
-				var engine = new RazorLightEngineBuilder()
-					.UseFileSystemProject(Path.Combine(path, "Assets", "Files"))
-					.Build();
+            for (int i = 0; i < 10; i++)
+            {
+                var engine = new RazorLightEngineBuilder()
+                    .UseFileSystemProject(Path.Combine(path, "Assets", "Files"))
+                    .Build();
 
-				var model = new { };
-				var t1 = Task.Run(async () => await engine.CompileRenderAsync("template1.cshtml", model));
-				var t2 = Task.Run(async () => await engine.CompileRenderAsync("template2.cshtml", model));
+                var model = new { };
+                var t1 = Task.Run(async () => await engine.CompileRenderAsync("template1.cshtml", model));
+                var t2 = Task.Run(async () => await engine.CompileRenderAsync("template2.cshtml", model));
 
-				var result = await Task.WhenAll(t1, t2);
-			}
-		}
-	}
+                var result = await Task.WhenAll(t1, t2);
+            }
+        }
+    }
 }
