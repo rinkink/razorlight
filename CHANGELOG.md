@@ -9,6 +9,8 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-10-29
+
 ### Added
 - Templates can use C# 13 and C# 14 syntax. Roslyn is now referenced at 5.9.0. Tests: `CSharp14SyntaxTests.cs`.
 
@@ -50,6 +52,7 @@ First release of the fork. Published to NuGet as `Rinkink.RazorLight`.
 - Dropped `Pose` and `MarkdownSnippets.MsBuild` test dependencies.
 - `Multiple_Simultaneous_Compilations_RaceCondition_Test` runs 10 iterations instead of 100 and is tagged `Category=Slow`.
 
-[Unreleased]: https://github.com/rinkink/razorlight/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/rinkink/razorlight/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/rinkink/razorlight/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/rinkink/razorlight/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/rinkink/razorlight/compare/v2.3.1...v3.0.0
