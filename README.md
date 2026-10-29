@@ -251,7 +251,7 @@ To inline a stylesheet into the page, see [Raw includes](#raw-includes). To turn
 
 ### Which C# version can I use in templates?
 
-Whatever your application's `LangVersion` is, read from its `deps.json`. On .NET 10 that defaults to C# 14, but the bundled Roslyn 4.8 compiles up to C# 12, so templates get C# 12.
+Whatever your application's `LangVersion` is, read from its `deps.json`. On .NET 10 that defaults to C# 14, which the referenced Roslyn 5.9 supports.
 
 ### How do I update a template that is already cached?
 

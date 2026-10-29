@@ -9,6 +9,9 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+### Added
+- Templates can use C# 13 and C# 14 syntax. Roslyn is now referenced at 5.9.0. Tests: `CSharp14SyntaxTests.cs`.
+
 ### Changed
 - **Breaking:** targets `net10.0` only; `net8.0` consumers must stay on 3.1.0. .NET 8 leaves support on 10 November 2026. The `Microsoft.Extensions.*` package references that the `Microsoft.AspNetCore.App` framework already provides are removed; only `DependencyModel` remains, on the 10.0 line.
 
