@@ -1,6 +1,6 @@
 # RazorLight
 
-> **This is a fork.** `Rinkink.RazorLight` is [toddams/RazorLight](https://github.com/toddams/RazorLight) taken at v2.3.1, retargeted to .NET 8 with the Razor compiler pinned to 6.0.36. Upstream has been inactive since 2023. The Precompile tool, samples and legacy .NET Framework support are removed. See [CHANGELOG.md](CHANGELOG.md) for details.
+> **This is a fork.** `Rinkink.RazorLight` is [toddams/RazorLight](https://github.com/toddams/RazorLight) taken at v2.3.1, retargeted to .NET 10 with the Razor compiler pinned to 6.0.36. Upstream has been inactive since 2023. The Precompile tool, samples and legacy .NET Framework support are removed. See [CHANGELOG.md](CHANGELOG.md) for details.
 >
 > Original work by [toddams](https://github.com/toddams), Apache-2.0, see [LICENSE](LICENSE).
 >
@@ -251,7 +251,7 @@ To inline a stylesheet into the page, see [Raw includes](#raw-includes). To turn
 
 ### Which C# version can I use in templates?
 
-Whatever your application's `LangVersion` is, read from its `deps.json`. On .NET 8 that defaults to C# 12.
+Whatever your application's `LangVersion` is, read from its `deps.json`. On .NET 10 that defaults to C# 14, but the bundled Roslyn 4.8 compiles up to C# 12, so templates get C# 12.
 
 ### How do I update a template that is already cached?
 

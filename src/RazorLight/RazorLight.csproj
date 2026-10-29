@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-      <TargetFramework>net8.0</TargetFramework>
+      <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>Rinkink.RazorLight</PackageId>
     <Title>Rinkink.RazorLight</Title>
-    <Description>Fork of RazorLight 2.3.1 retargeted to net8.0 with pinned Razor 6.0.36. Use Razor to build HTML from Razor strings.</Description>
+    <Description>Fork of RazorLight 2.3.1 retargeted to net10.0 with pinned Razor 6.0.36. Use Razor to build HTML from Razor strings.</Description>
     <Authors>toddams, rinkink</Authors>
     <PackageTags>RazorLight, razor, render, template-engine</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -21,12 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="[6.0.36]" />
     <PackageReference Include="Microsoft.CodeAnalysis.Razor" Version="[6.0.36]" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>

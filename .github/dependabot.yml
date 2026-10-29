@@ -14,7 +14,7 @@ updates:
       # Last Razor compiler published to NuGet, see RazorLight.csproj
       - dependency-name: "Microsoft.AspNetCore.Mvc.Razor.Extensions"
       - dependency-name: "Microsoft.CodeAnalysis.Razor"
-      # Stay on the 8.0 line while targeting net8.0
+      # Stay on the 10.0 line while targeting net10.0
       - dependency-name: "Microsoft.Extensions.*"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
 

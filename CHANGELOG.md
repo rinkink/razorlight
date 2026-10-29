@@ -9,6 +9,9 @@ Upstream history before that point is unchanged and is not repeated here.
 
 ## [Unreleased]
 
+### Changed
+- **Breaking:** targets `net10.0` only; `net8.0` consumers must stay on 3.1.0. .NET 8 leaves support on 10 November 2026. The `Microsoft.Extensions.*` package references that the `Microsoft.AspNetCore.App` framework already provides are removed; only `DependencyModel` remains, on the 10.0 line.
+
 ## [3.1.0] - 2026-10-06
 
 ### Added
